@@ -1,0 +1,58 @@
+
+<html>
+  <head>
+      <title>Cube</title>
+      <script src = "./../js/three.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      let scene, renderer, camera, cube, sphere;
+      let xoffset = 0.05;
+            
+      const createGeometry = () => {
+        let material = new THREE.MeshDepthMaterial();
+          
+          let geometry = new THREE.BoxGeometry(3, 2, 4);
+          cube = new THREE.Mesh(geometry, material);
+          cube.position.z = -10;
+          cube.position.x = -5;
+          
+          geometry = new THREE.SphereGeometry(3, 30, 30);
+          sphere = new THREE.Mesh(geometry, material);
+          sphere.position.z = 0;
+          sphere.position.x = 5;
+
+          scene.add(cube);
+          scene.add(sphere);
+      }
+
+      const init = () => {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff)
+
+        camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+        scene.add(camera);
+        camera.position.z = 15;
+        createGeometry()
+        renderer = new THREE.WebGLRenderer()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(renderer.domElement)
+      };
+
+
+      const mainLoop = () => {
+        cube.position.z += xoffset
+        sphere.position.z -= xoffset
+        if(cube.position.z >= 6  || cube.position.z <= -16){
+          xoffset *= -1;
+        };
+        
+        renderer.render(scene, camera);
+        requestAnimationFrame(mainLoop)
+      };
+      
+      init();
+      mainLoop();
+    </script>
+  </body> 
+</html>

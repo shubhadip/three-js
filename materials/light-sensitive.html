@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="./../js/three.min.js" ></script>
+</head>
+<body>
+  <script type="text/javascript">
+    let scene, renderer,cube,sphere, cone, camera;
+    let ADD = 0.01;
+
+    let randomInRange = (from, to) => {
+      let x = Math.random() * (to - from);
+      return x + from;
+    };
+
+    const createGeomtery = () => {
+      // const material = new THREE.MeshLambertMaterial({side: THREE.DoubleSide, color: 0x7fc5f9, emissive: 0x25673d, emissiveIntensity: 0.5});
+      // const material = new THREE.MeshPhongMaterial({side: THREE.DoubleSide, color: 0x7fc5f9, emissive: 0x25673d, emissiveIntensity: 0.5, shininess: 100})
+
+      const material = new THREE.MeshLambertMaterial({
+        side: THREE.DoubleSide,
+        color: 0x7fc5f9, 
+        emissive: 0x25673d, 
+        emissiveIntensity: 0.4,
+        metalness: 1,
+        roughness: 1
+      });
+
+      let boxg = new THREE.BoxGeometry(3,3,3)
+      cube = new THREE.Mesh(boxg, material)
+      cube.position.x = -16
+
+      let sphereg = new THREE.SphereGeometry(5,30,30)
+      sphere = new THREE.Mesh(sphereg, material)
+      sphere.position.x = 16
+
+      let coneg = new THREE.ConeGeometry( 3, 4, 20, 1, true );
+      cone = new THREE.Mesh(coneg, material)
+      cone.position.x = 0
+
+      scene.add(sphere);
+      scene.add(cone);
+      scene.add(cube);
+    }
+
+    let init = () => {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000)
+
+      camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+      scene.add(camera);
+      camera.position.z = 20;
+      
+      let directionalLight = new THREE.DirectionalLight({color: 0xffffff});
+      scene.add(directionalLight);
+      createGeomtery();
+      renderer = new THREE.WebGLRenderer()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      document.body.appendChild(renderer.domElement)
+    }
+
+    let mainLoop = () => {
+      sphere.rotation.x += ADD
+      sphere.rotation.y += ADD
+
+      cube.rotation.x += ADD
+      cube.rotation.y += ADD
+
+      cone.rotation.x += ADD
+      cone.rotation.y += ADD
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(mainLoop)
+    }
+
+    init()
+    mainLoop()
+  </script>
+</body>
+</html>

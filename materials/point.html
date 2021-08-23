@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NormalMaterial</title>
+    <script type="text/javascript" src="./../js/three.min.js" ></script>
+</head>
+<body>
+    <script type="text/javascript">
+    let scene, renderer,cube1, cylinder, plain, camera;
+    let ADD = 0.01;
+
+    let randomInRange = function(from, to) {
+      let x = Math.random() * (to - from);
+      return x + from;
+    };
+
+    function createCube1(){
+      let material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5});
+      const geometry = new THREE.Geometry();
+
+      for(let i= 0; i< 100; i++){
+        let x = randomInRange(-30,30);
+        let y = randomInRange(-30,30)
+        let z = randomInRange(-30,30)
+
+        geometry.vertices.push(new THREE.Vector3(x,y,z))
+      };
+      geometry.computeBoundingSphere();
+      particles = new THREE.Points(geometry, material)
+      
+      scene.add(particles)
+    }
+
+    let init = function() {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000)
+
+      camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+      scene.add(camera);
+      camera.position.z = 20;
+
+      createCube1()
+      
+      renderer = new THREE.WebGLRenderer()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      document.body.appendChild(renderer.domElement)
+    }
+
+    let mainLoop = function(){
+      renderer.render(scene, camera);
+      requestAnimationFrame(mainLoop)
+    }
+
+    init()
+    mainLoop()
+    </script>
+</body>
+</html>

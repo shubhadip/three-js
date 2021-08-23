@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NormalMaterial</title>
+    <script type="text/javascript" src="./../js/three.min.js" ></script>
+</head>
+<body>
+    <script type="text/javascript">
+    let scene, renderer,cube1, cylinder, plain, camera;
+    let ADD = 0.01;
+    
+    function createCube1(){
+        let geometry = new THREE.BoxGeometry(5,5,5);
+        const material = new THREE.PointsMaterial( { color: 0x0000ff} );
+        cube1 = new THREE.Points(geometry, material)
+        scene.add(cube1)
+        cube1.position.z = -15
+        cube1.position.y = -10
+    }
+
+    function createCylinder(){
+        const geometry = new THREE.CylinderGeometry( 5, 5, 20, 32 );
+        const material = new THREE.LineBasicMaterial( { color: 0xff0000, lineWidth : 10 } );
+        cylinder = new THREE.Line(geometry, material)
+        scene.add(cylinder)
+        cylinder.position.z = -15
+        cylinder.position.y = 10
+    }
+
+    function createSphere(){
+        const geometry = new THREE.SphereGeometry( 10, 30, 30 );
+        const material = new THREE.LineDashedMaterial({ 
+          color: 0xff00ff,
+          lineWidth : 1,
+          dashSize : 5,
+          gapSize: 1
+        });
+        sphere = new THREE.Line(geometry, material)
+        scene.add(sphere)
+        sphere.computeLineDistances()
+
+        sphere.position.z = -15
+        sphere.position.y = 1
+        sphere.position.x = 25
+    }
+    let init = function() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff)
+
+        camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+        scene.add(camera);
+        camera.position.z = 40;
+
+        createCube1()
+        createCylinder()
+        createSphere()
+        renderer = new THREE.WebGLRenderer()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(renderer.domElement)
+    }
+    let mainLoop = function(){
+        cylinder.rotation.x += ADD
+        cylinder.rotation.y += ADD
+        cube1.rotation.x += ADD
+        cube1.rotation.y += ADD
+        sphere.rotation.x += ADD
+        sphere.rotation.y += ADD
+        renderer.render(scene, camera);
+        requestAnimationFrame(mainLoop)
+    }
+
+    init()
+    mainLoop()
+    </script>
+</body>
+</html>

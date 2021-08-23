@@ -1,0 +1,85 @@
+
+<html>
+  <head>
+      <title>Cube</title>
+      <script src = "./../js/three.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      let scene, renderer, camera, cube1, cube2;
+      let xoffset = 0.05;
+            
+      const createCube1 = () => {
+        let geometry = new THREE.BoxGeometry(5,5,5);
+        let material = new THREE.MeshBasicMaterial({
+          color: 0xff0000,
+          transparent: true, opacity: 0.6
+        });
+        cube1 = new THREE.Mesh(geometry, material);
+        cube1.position.y = -5
+        cube1.position.z = -6
+        cube1.position.x = 6
+        scene.add(cube1);
+      };
+      
+      const createCube2 = () => {
+        let geometry = new THREE.BoxGeometry(1,1,1);
+        let material = new THREE.MeshNormalMaterial({
+          color: 0x0000ff,
+          transparent: true, opacity: 0.6
+        });
+        cube2 = new THREE.Mesh(geometry, material);
+        cube2.position.z = 6
+        cube2.position.y = -5
+        cube2.position.y = -6
+        scene.add(cube2);
+      };
+
+      const createPlane = () => {
+        let geometry = new THREE.PlaneGeometry(1000, 1000, 50, 50);
+        let material = new THREE.MeshBasicMaterial({
+          color: 0x00ff00,
+          wireframe: true,
+        });
+        p = new THREE.Mesh(geometry, material);
+        scene.add(p);
+        p.rotation.x = Math.PI/2;
+        p.position.y = -100
+      }
+
+      const init = () => {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff)
+
+        camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+        scene.add(camera);
+        camera.position.z = 20;
+
+        createCube1()
+        createCube2()
+        createPlane()
+        renderer = new THREE.WebGLRenderer()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(renderer.domElement)
+      };
+
+
+      const mainLoop = () => {
+        cube1.position.x += xoffset
+        cube2.position.x -= xoffset
+        cube1.position.z += xoffset
+        cube2.position.z -= xoffset
+        cube2.rotation.z -= xoffset;
+        if(cube1.position.x > 6  || cube1.position.x < -6){
+          xoffset *= -1;
+        };
+        
+        renderer.render(scene, camera);
+        requestAnimationFrame(mainLoop)
+      };
+      
+      init();
+      mainLoop();
+    </script>
+  </body> 
+</html>
